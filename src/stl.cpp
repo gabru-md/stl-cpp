@@ -12,6 +12,7 @@ int main(void) {
 	nc::array a(4); nc::array b(3);
 	b[0]=9;b[1]=5;b[2]=3;
 	a[0]=1;a[1]=9;a[2]=7;a[3]=5;
-	tz::toeplitz(a,b);
+	nc::matrix op = tz::toeplitz(a,b);
+	nc::flush(op);
 	return 0;
 }

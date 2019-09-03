@@ -2,6 +2,7 @@
 #define NUMCPP_H
 
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ namespace nc {
 	typedef vector<int> array;
 	typedef vector<vector<int> > matrix;
 	typedef pair<int, int> shape;
-	typedef pair<array, int> odarray;
+	typedef pair<array, int> od_array;
 
 	// creates a new matrix from a shape
 	matrix ncmat(shape s) {
@@ -34,7 +35,7 @@ namespace nc {
 		return out;
 	}
 
-	array concat (odarray in1, array in2, int offset) {
+	array concat (od_array in1, array in2, int offset) {
 		array out;
 		int order = in1.second;
 		switch (order) {
@@ -57,7 +58,33 @@ namespace nc {
 		for(int i=0;i<a2.size();i++) out.push_back(a2[i]);
 		return out;
 	}
-	
+
+	array slice (array in, int start, int end) {
+		array out;
+		if(end > in.size()) {
+			return out; 
+		}
+		for(int i=start;i<end;i++) out.push_back(in[i]);
+		return out;
+	}
+
+	array slice (array in, int start) {
+		return slice(in, start, in.size());
+	}
+
+	void flush (matrix in) {
+		for(int i=0;i<in.size();i++) {
+			for(int j=0;j<in[i].size();j++)
+				std::cout << in[i][j] << " ";
+			std::cout << std::endl; 
+		}
+	}
+
+	void flush (array in) {
+		for(int i=0;i<in.size();i++) 
+			std::cout << in[i] << " ";
+		std::cout << std::endl; 
+	}
 }
 
 #endif
