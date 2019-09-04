@@ -1,4 +1,4 @@
-The following are the things to do
+<!-- The following are the things to do
 * get `l1.py` working in c++/c
 * rewrite RobustSTL into c++/c
 * design `toeplitz` function to return a toeplitz matrix from given R and C
@@ -13,3 +13,6 @@ Notes
 	- matrix(A) : creates a matrix from the list A supplied
 	- matrix(A, B) : creates a matrix of shape B with the list A suplied
 	
+ -->
+
+ * TOEPLITZ isn't working as it should be. Need top fix it tomorrow asap.

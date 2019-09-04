@@ -4,15 +4,16 @@
 
 #include "include/numcpp.h"
 #include "include/toeplitz.h"
+#include "include/utils.h"
+#include <iostream>
 
 int main(void) {
-	nc::shape s (2,3);
-	nc::matrix m = nc::ncmat(s);
-	m[0][0]=0; m[0][1]=1;m[0][2]=2;m[1][1]=1;m[1][0]=1;m[1][2]=3;
-	nc::array a(4); nc::array b(3);
-	b[0]=9;b[1]=5;b[2]=3;
-	a[0]=1;a[1]=9;a[2]=7;a[3]=5;
-	nc::matrix op = tz::toeplitz(a,b);
-	nc::flush(op);
+	// nc::shape shp (3,4);
+	// nc::array entry (3,0); entry[0] = 5; entry[1] = 2; entry[2] = 4;
+	// nc::matrix op = tz::get_toeplitz(shp, entry);
+	// nc::flush(op);
+	nc::flush << util::get_season_idx(32,14);
+	std::cout <<  std::endl ;
+	std::cout << util::bilateral_filter(3.2,2.1,4.3,3.2) << std::endl;
 	return 0;
 }
