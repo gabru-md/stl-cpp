@@ -14,13 +14,23 @@ namespace nc {
 	typedef pair<array, int> od_array;
 	typedef pair<int, int> tuple_i;
 	typedef pair<double, double> tuple_d;
-	typedef cout flush;
 
 	// creates a new matrix from a shape
-	matrix ncmat(shape shp) {
+	matrix ncmat (shape shp) {
 		matrix out;
 		for(int i=0;i<shp.first;i++) {
 			out.push_back(array(shp.second,0));
+		}
+		return out;
+	}
+
+	matrix ncmat (array in, shape shp) {
+		matrix out = ncmat(shp);
+		int i = 0, end = in.size();
+		for(int j=0;j<shp.first;j++) {
+			for(int k=0;k<shp.second;k++) {
+				out[j][k] = in[i++];
+			}
 		}
 		return out;
 	}
@@ -33,6 +43,14 @@ namespace nc {
 				out.push_back(in[i][j]);
 
 		return out;
+	}
+
+
+	matrix reshape (matrix in, shape shp) {
+		array arr_in = flatten(in);
+		if(shp.first*shp.second != arr_in.size())
+			return ncmat(shp);
+		return ncmat(arr_in, shp);
 	}
 
 	array concat (od_array in1, array in2, int offset) {
