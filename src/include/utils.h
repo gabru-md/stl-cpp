@@ -44,7 +44,6 @@ namespace utils {
 
 	nc::array get_relative_trends (nc::array delta_trends) {
 		nc::array init_value = nc::zeros(1);
-		nc::array idxs = nc::arange(delta_trends.size());
 		nc::array relative_trends; int prev = 0;
 		for(int i=0;i<delta_trends.size();i++) {
 			relative_trends.push_back(delta_trends[i] + prev); 

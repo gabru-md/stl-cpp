@@ -8,8 +8,8 @@ using namespace std;
 
 namespace nc {
 
-	typedef vector<int> array;
-	typedef vector<vector<int> > matrix;
+	typedef vector<double> array;
+	typedef vector<vector<double> > matrix;
 	typedef pair<int, int> shape;
 	typedef pair<array, int> od_array;
 	typedef pair<int, int> tuple_i;
@@ -19,7 +19,7 @@ namespace nc {
 	matrix ncmat (shape shp) {
 		matrix out;
 		for(int i=0;i<shp.first;i++) {
-			out.push_back(array(shp.second,0));
+			out.push_back(array(shp.second,0.0));
 		}
 		return out;
 	}
@@ -107,38 +107,53 @@ namespace nc {
 	}
 
 
-	array add (int val, array in) {
+	array add (double val, array in) {
 		array out;
 		for(int i=0;i<in.size();i++)
 			out.push_back(in[i]+val);
 		return out;
 	}
 
-	array add (array in, int val) {
+	array add (array in, double val) {
 		return add(val, in);
 	}
 
-	array mul (int val, array in) {
+	array mul (double val, array in) {
 		array out;
 		for(int i=0;i<in.size();i++)
 			out.push_back(in[i]*val);
 		return out;
 	}
 
-	array mul (array in, int val) {
+	array mul (array in1, array in2) {
+		array out;
+		if(in1.size() != in2.size())
+			return out;
+		for(int i=0;i<in1.size();i++)
+			out.push_back(in1[i]*in2[i]);
+		return out;
+	}
+
+	array mul (array in, double val) {
 		return mul(val, in);
 	}
 
+	double sum (array in) {
+		double sum = 0;
+		for(int i=0;i<in.size();i++) sum += in[i];
+		return sum;
+	}
+
 	// creates array of zeros
-	array zeros (int size) { return array(size, 0);	}
+	array zeros (int size) { return array(size, 0.0);	}
 
 	matrix zeros (shape shp) { return ncmat(shp); }
 
-	array concat (int el, array a2) { return concat(array(1,el), a2); }
+	array concat (double el, array a2) { return concat(array(1,el), a2); }
 
-	array concat (array a1, int el) { return concat(a1, array(1,el)); }
+	array concat (array a1, double el) { return concat(a1, array(1,el)); }
 
-	array concat (int el1, int el2) { return concat(array(1,el1), array(1,el2)); }
+	array concat (double el1, double el2) { return concat(array(1,el1), array(1,el2)); }
 
 	// flattens the array
 	array flatten (array in) { return in; }
@@ -152,19 +167,27 @@ namespace nc {
 
 template <typename T>
 ostream& operator<<(ostream& os, const vector<vector<T> >& in) {
+	os << "[ ";
     for(int i=0;i<in.size();i++) {
+    	if(i==0) os << "[ " ;
+    	else os << " [ ";
 		for(int j=0;j<in[i].size();j++)
 			os << in[i][j] << " ";
-		os << std::endl; 
+		if(i==in.size()-1) os << "]";
+		else os << "], ";
+		if(i!=in.size()-1) os << std::endl; 
 	}
+	os << " ]";
+	os << std::endl;
     return os;
 }
 
 template <typename T>
 ostream& operator<<(ostream& os, const vector<T>& in) {
+	os << "[ ";
 	for(int i=0;i<in.size();i++) 
 		os << in[i] << " ";
-	os << std::endl; 
+	os << "]" << std::endl; 
     return os;
 }
 
