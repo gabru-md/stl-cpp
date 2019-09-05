@@ -5,7 +5,7 @@
 #include <iostream>
 #include "numcpp.h"
 
-namespace util {
+namespace utils {
 
 	double bilateral_filter (double j, double t, double y_j, double y_t, double delta1 = 1.0, double delta2 = 1.0) {
 		double idx1 = -1.0*(abs(j-t)*abs(j-t))/(2.0*delta1*delta1);
@@ -40,6 +40,18 @@ namespace util {
 			idxs_mat.push_back(get_neighbor_range(total_len, key_idxs[i], H));
 
 		return nc::flatten(idxs_mat);
+	}
+
+	nc::array get_relative_trends (nc::array delta_trends) {
+		nc::array init_value = nc::zeros(1);
+		nc::array idxs = nc::arange(delta_trends.size());
+		nc::array relative_trends; int prev = 0;
+		for(int i=0;i<delta_trends.size();i++) {
+			relative_trends.push_back(delta_trends[i] + prev); 
+			prev = relative_trends[i];
+		}
+		return nc::concat(init_value, relative_trends);
+
 	}
 
 }

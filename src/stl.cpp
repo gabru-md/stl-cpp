@@ -16,5 +16,6 @@ int main(void) {
 	// std::cout <<  std::endl ;
 	// std::cout << util::bilateral_filter(3.2,2.1,4.3,3.2) << std::endl;
 	std::cout <<  nc::reshape(op, nc::shape (4,3));
+	std::cout << utils::get_relative_trends(nc::arange(6));
 	return 0;
 }
