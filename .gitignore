@@ -1,5 +1,8 @@
 # custom
 src/test.py
+src/incl.py
+src/l1.py
+src/__pycache__/
 
 # Prerequisites
 *.d

@@ -48,6 +48,23 @@ namespace stl {
 			season_tilda.push_back(internal::get_season_value(i,sample,season_len,K,H,ds1,ds2));
 		return season_tilda;
 	}
+
+	nc::tuple_tri adjustment (nc::array sample, nc::array relative_trends, nc::array season_tilda, int season_len) {
+		int num_season = (int)sample.size()/season_len;
+		double trend_init = nc::mean(nc::slice(season_tilda, 0, season_len*num_season));
+		nc::array trends_hat = nc::add(relative_trends, trend_init);
+		nc::array seasons_hat = nc::sub(season_tilda, trend_init);
+		nc::array remainders_hat = nc::sub(nc::sub(sample, trends_hat), seasons_hat);
+		nc::tuple_tri out = {trends_hat, seasons_hat, remainders_hat};
+		return out;
+	}
+
+	 bool check_converge_criteria (nc::array prev_remainders, nc::array remainders) {
+		double diff = std::sqrt(nc::mean(nc::square(nc::sub(remainders, prev_remainders))));
+		if(diff < 1e-10)
+			return true;
+		return false;
+	}
 }
 
 #endif

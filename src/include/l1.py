@@ -1,11 +1,18 @@
 # Sources: http://cvxopt.org/examples/mlbook/l1.html?highlight=l1
-# taken from ^^ 
+# improved by [gabru-md](https://github.com/gabru-md)
 
+import numpy as np
 from cvxopt import blas, lapack, solvers
 from cvxopt import matrix, spdiag, mul, div, sparse 
 from cvxopt import spmatrix, sqrt, base
 
 def l1(P, q):
+    
+    P = np.asarray(P)
+    P = matrix(P)
+    q = np.asarray(q)
+    q = matrix(q)
+
     m, n = P.size
     c = matrix(n*[0.0] + m*[1.0])
     h = matrix([q, -q])

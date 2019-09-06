@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <stdarg.h>
 
 using namespace std;
 
@@ -14,6 +15,14 @@ namespace nc {
 	typedef pair<array, int> od_array;
 	typedef pair<int, int> tuple_i;
 	typedef pair<double, double> tuple_d;
+	typedef pair<array, array> tuple_a;
+
+
+	struct tuple_tri {
+		array first;
+		array second;
+		array third;
+	};
 
 	// creates a new matrix from a shape
 	matrix ncmat (shape shp) {
@@ -118,6 +127,30 @@ namespace nc {
 		return add(val, in);
 	}
 
+	array sub (double val, array in) {
+		return add(-1*val, in);
+	}
+
+	array add (array in1, array in2) {
+		array out;
+		if(in1.size() != in2.size()) return out;
+		for(int i=0;i<in1.size();i++) 
+			out.push_back(in1[i]+in2[i]);
+		return out;
+	}
+
+	array sub (array in, double val) {
+		return add(in, -1*val);
+	}
+
+	array sub (array in1, array in2) {
+		array out;
+		if(in1.size() != in2.size()) return out;
+		for(int i=0;i<in1.size();i++) 
+			out.push_back(in1[i]-in2[i]);
+		return out;
+	}
+
 	array mul (double val, array in) {
 		array out;
 		for(int i=0;i<in.size();i++)
@@ -138,10 +171,32 @@ namespace nc {
 		return mul(val, in);
 	}
 
+	matrix mul (matrix in, double val) {
+		matrix out = in;
+		for(int i=0;i<in.size();i++)
+			out[i] = mul(out[i], val);
+		return out;
+	}
+
+	matrix mul (double val, matrix in) {
+		return mul(in, val);
+	}
+
 	double sum (array in) {
 		double sum = 0;
 		for(int i=0;i<in.size();i++) sum += in[i];
 		return sum;
+	}
+
+	double mean (array in) {
+		return sum(in)/in.size();
+	}
+
+	array square (array in) {
+		array out;
+		for(int i=0;i<in.size();i++)
+			out.push_back(in[i]*in[i]);
+		return out;
 	}
 
 	// creates array of zeros
