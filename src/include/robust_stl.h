@@ -2,6 +2,8 @@
 #define ROBUST_STL_H
 
 #include "numcpp.h"
+#include "utils.h"
+#include "l1_norm.h"
 
 namespace stl {
 	nc::array denoise_step (nc::array sample, int H=3, double dn1=1.0, double dn2=1.0) {
@@ -64,6 +66,23 @@ namespace stl {
 		if(diff < 1e-10)
 			return true;
 		return false;
+	}
+
+	nc::tuple_a trend_extraction (nc::array sample, int season_len, double reg1=10.0, double reg2=0.5) {
+		int sample_len = sample.size();
+		nc::array season_diff = nc::sub(nc::slice(sample, season_len), nc::rev_slice(sample, 0, season_len));
+		nc::array q_arr = nc::concat(season_diff, nc::zeros(sample_len*2-3));
+		nc::matrix q = nc::reshape(q_arr, nc::shape(q.size(), 1));
+
+		nc::matrix M = tz::get_toeplitz(nc::shape(sample_len-season_len,sample_len-1), nc::ones(season_len));
+		nc::array bipolar; bipolar.push_back(1); bipolar.push_back(-1);
+		nc::matrix D = tz::get_toeplitz(nc::shape(sample_len-2, sample_len-1), bipolar);
+		nc::matrix P = ; // write concatenate function here => np.concatenate([M, reg1*np.eye(sample_len-1), reg2*D], axis=0)
+
+		nc::array delta_trends = l1::py_L1(P,q);
+		nc::array relative_trends = utils::get_relative_trends(delta_trends);
+
+		return tuple_a(nc::sub(sample, relative_trends), relative_trends);
 	}
 }
 

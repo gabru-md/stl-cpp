@@ -62,6 +62,10 @@ namespace nc {
 		return ncmat(arr_in, shp);
 	}
 
+	matrix reshape (array in, shape shp) {
+		return ncmat(in, shp);
+	}
+
 	array concat (od_array in1, array in2, int offset) {
 		array out;
 		int order = in1.second;
@@ -87,6 +91,12 @@ namespace nc {
 			return out; 
 		}
 		for(int i=start;i<end;i++) out.push_back(in[i]);
+		return out;
+	}
+
+	array rev_slice (array in, int start, int offset) {
+		array out;
+		for(int i=start; i<in.size()-offset;i++) out.push_back(in[i]);
 		return out;
 	}
 
@@ -199,10 +209,18 @@ namespace nc {
 		return out;
 	}
 
+	matrix eye (shape shp) {
+		matrix out = ncmat(shp);
+		for(int i=0;i<shp.first;i++) out[i][i] = 1.0;
+		return out;
+	}
+
 	// creates array of zeros
-	array zeros (int size) { return array(size, 0.0);	}
+	array zeros (int size) { return array(size, 0.0); }
 
 	matrix zeros (shape shp) { return ncmat(shp); }
+
+	array ones (int size) { return array(size, 1.0); }
 
 	array concat (double el, array a2) { return concat(array(1,el), a2); }
 
