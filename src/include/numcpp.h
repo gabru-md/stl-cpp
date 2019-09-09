@@ -85,6 +85,15 @@ namespace nc {
 		return out;
 	}
 
+	matrix concat (matrix m1, matrix m2, matrix m3) {
+		matrix out = ncmat(shape(m1.size()+m2.size()+m3.size(), m1[0].size()));
+		int i,j,k=0;
+		for(i=0;i<m1.size();i++,k++) for(j=0;j<m1[i].size();j++) out[k][j] = m1[i][j];
+		for(i=0;i<m2.size();i++,k++) for(j=0;j<m2[i].size();j++) out[k][j] = m2[i][j];
+		for(i=0;i<m3.size();i++,k++) for(j=0;j<m3[i].size();j++) out[k][j] = m3[i][j];
+		return out;
+	}
+
 	array slice (array in, int start, int end) {
 		array out;
 		if(end > in.size()) {
@@ -213,6 +222,10 @@ namespace nc {
 		matrix out = ncmat(shp);
 		for(int i=0;i<shp.first;i++) out[i][i] = 1.0;
 		return out;
+	}
+
+	matrix eye (int n) {
+		return eye(shape(n,n));
 	}
 
 	// creates array of zeros

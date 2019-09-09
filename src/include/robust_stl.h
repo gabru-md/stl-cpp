@@ -1,6 +1,9 @@
 #ifndef ROBUST_STL_H
 #define ROBUST_STL_H
 
+#include <time.h>
+#include <stdlib.h>
+
 #include "numcpp.h"
 #include "utils.h"
 #include "l1_norm.h"
@@ -72,17 +75,41 @@ namespace stl {
 		int sample_len = sample.size();
 		nc::array season_diff = nc::sub(nc::slice(sample, season_len), nc::rev_slice(sample, 0, season_len));
 		nc::array q_arr = nc::concat(season_diff, nc::zeros(sample_len*2-3));
+		std::cout << q_arr;
 		nc::matrix q = nc::reshape(q_arr, nc::shape(q.size(), 1));
 
 		nc::matrix M = tz::get_toeplitz(nc::shape(sample_len-season_len,sample_len-1), nc::ones(season_len));
 		nc::array bipolar; bipolar.push_back(1); bipolar.push_back(-1);
 		nc::matrix D = tz::get_toeplitz(nc::shape(sample_len-2, sample_len-1), bipolar);
-		nc::matrix P = ; // write concatenate function here => np.concatenate([M, reg1*np.eye(sample_len-1), reg2*D], axis=0)
-
+		nc::matrix P = nc::concat(M, nc::mul(reg1, nc::eye(sample_len-1)), nc::mul(reg2, D)); // write concatenate function here => np.concatenate([M, reg1*np.eye(sample_len-1), reg2*D], axis=0)
+		std::cout << P.size() << " : " << P[0].size() << std::endl;
+		//std::cout << P;
+		std::cout << q << std::endl;
 		nc::array delta_trends = l1::py_L1(P,q);
+		std::cout << delta_trends;
 		nc::array relative_trends = utils::get_relative_trends(delta_trends);
 
-		return tuple_a(nc::sub(sample, relative_trends), relative_trends);
+		return nc::tuple_a(nc::sub(sample, relative_trends), relative_trends);
+	}
+
+	nc::array get_sample(int sample_size, int season_len) {
+		nc::array out; int k = sample_size/season_len; int j = 100; int up=true;
+		//std::cout<<k<<std::endl;
+		srand (time(NULL));
+		for(int i=0;i<sample_size;i++) {
+			out.push_back(j);
+			if(up)
+				j = j + (rand()%10);
+			else
+				j = j - (rand()%10);
+			if(i%(k/2)==0) {
+				up = !up;
+			}
+			if(i%k==0) {
+				j += (rand()%1000);
+			}
+		}
+		return out;
 	}
 }
 

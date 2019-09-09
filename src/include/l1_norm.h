@@ -46,14 +46,14 @@ namespace l1 {
 				pyArgs args = L1_Args(P, nc::shape(P.size(), P[0].size()), q, nc::shape(q.size(), q[0].size()));
 				PyObject* res = PyObject_CallFunction(l1_norm, "00", args.PMat, args.qMat);
 
-				if(PyList_Size(res) == 0) return out;
-				PyObject* item;
-				for(int i=0;i<PyList_Size(res);i++) {
-					item = PyList_GetItem(res, i);
-					out.push_back(PyFloat_AsDouble(item));
-				}
+				// if(PyList_Size(res) == 0) return out;
+				// PyObject* item;
+				// for(int i=0;i<PyList_Size(res);i++) {
+				// 	item = PyList_GetItem(res, i);
+				// 	out.push_back(PyFloat_AsDouble(item));
+				// }
 
-				Py_XDECREF(item);
+				// Py_XDECREF(item);
 
 				Py_XDECREF(res);
 
