@@ -2,6 +2,26 @@
 #define L1_SOLVE_H
 
 #include "cvl1qc.h"
+#include "../include/numcpp.h"
+#include <vector>
+#include <iostream>
+using namespace std;
+
+nc::matrix toNCMatrix (CvMat* X) {
+	CvMat* temp = cvCloneMat(X);
+	nc::shape shp(temp->rows, temp->cols);
+	return nc::ncmat(temp->data.db, shp);
+}
+
+CvMat* toCvMat (nc::matrix mat) {
+	CvMat* X = cvCreateMat(mat.size(), mat[0].size(), CV_64FC1);
+	int SIZE = mat.size()*mat[0].size();
+	double *dd = new double [SIZE];
+	nc::array flat = nc::flatten(mat);
+	for(int i=0;i<SIZE;i++) dd[i] = flat[i];
+	X->data.db = dd;
+	return X;
+}
 
 void icvAOps( CvMat* X, CvMat* Y, void* userdata )
 {
@@ -15,14 +35,20 @@ void icvAtOps( CvMat* X, CvMat* Y, void* userdata )
 	cvGEMM( A, X, 1, NULL, 0, Y, CV_GEMM_A_T );
 }
 
-void l1_solve()
+nc::array l1_solve(nc::matrix P, nc::matrix q)
 {
-	const int N = 1024;
-	const int K = 128;
+	// nc::matrix mat = nc::ncmat(nc::shape(3,2));
+	// mat[0][0] = 1;mat[0][1] = 2;
+	// mat[1][0] = 2; mat[1][1] = 6;
+	// mat[2][0] = 5; mat[2][1] = 8;
+	// CvMat* a = toCvMat(mat);
+	// cout << a ;
+	const int N = P[0].size();
+	const int K = P.size();
 	const int T = 20;
-	CvMat* A = cvCreateMat( K, N, CV_64FC1 );
+	CvMat* A = toCvMat(P);
 	CvMat* X = cvCreateMat( N, 1, CV_64FC1 );
-	CvMat* Y = cvCreateMat( K, 1, CV_64FC1 );
+	CvMat* Y = toCvMat(q);
 	CvRNG rng_state = cvRNG(0xffffffff);
 	cvRandArr( &rng_state, A, CV_RAND_NORMAL, cvScalar(0), cvScalar(1) );
 	cvZero( X );
@@ -37,19 +63,24 @@ void l1_solve()
 	cvMatMulAdd( A, X, e, Y );
 	double epsilon = sigma * sqrt(K) * sqrt(1 + 2 * sqrt(2) / sqrt(K));
 	CvMat* X0 = cvCreateMat( N, 1, CV_64FC1 );
-	printf("||X0 - X|| Before L1QC : %f\n", cvNorm(X0, X, CV_L1));
+	// printf("||X0 - X|| Before L1QC : %f\n", cvNorm(X0, X, CV_L1));
 	double t = (double)cvGetTickCount();
 	cvL1QCSolve( icvAOps, icvAtOps, A, Y, X0, epsilon );
 	t = (double)cvGetTickCount() - t;
-	printf( "time = %gms\n", t/((double)cvGetTickFrequency() * 1000.) );
-	printf("||X0 - X|| After L1QC : %f\n", cvNorm(X0, X, CV_L1));
+	// printf( "time = %gms\n", t/((double)cvGetTickFrequency() * 1000.) );
+	// printf("||X0 - X|| After L1QC : %f\n", cvNorm(X0, X, CV_L1));
 	//for ( int i = 0; i < N; i++ )
 	//	printf("%f %f\n", X->data.db[i], X0->data.db[i]);
+
+	nc::array toReturn = nc::flatten(toNCMatrix(X0));
+
 	cvReleaseMat( &X0 );
 	cvReleaseMat( &e );
 	cvReleaseMat( &Y );
 	cvReleaseMat( &X );
 	cvReleaseMat( &A );
+
+	return toReturn;
 }
 
 #endif

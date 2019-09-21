@@ -44,6 +44,7 @@ namespace nc {
 		return out;
 	}
 
+
 	matrix ncmat (array in, shape shp) {
 		matrix out = ncmat(shp);
 		int i = 0, end = in.size();
@@ -53,6 +54,12 @@ namespace nc {
 			}
 		}
 		return out;
+	}
+
+	matrix ncmat (double *in, shape shp) {
+		array in1; int size = shp.first*shp.second;
+		for(int i=0;i<size;i++) in1.push_back(in[i]);
+		return ncmat(in1, shp);
 	}
 
 	// flattens the matrix to array

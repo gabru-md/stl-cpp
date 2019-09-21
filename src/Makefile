@@ -1,12 +1,15 @@
 CXX = g++
 LINKFLAG = -ldl -lpthread -lrt -lopencv_core
-INCFLAGS = -I"usr/include/opencv"
+INCFLAGS = -I"/usr/include/opencv"
 CXXFLAGS = -O3 --fast-math -msse2 
 
 stl:
-	$(CXX) -o stl stl.o $(LINKFLAG)
+	$(CXX) $(INCFLAGS) stl.cpp -o stl $(LINKFLAG)
 clean:
 	rm stl
+again:
+	make clean
+	make stl
 # .c.o:
 # 	$(CXX) $(INCFLAGS) $< -o $@ -c $(CXXFLAGS)
 

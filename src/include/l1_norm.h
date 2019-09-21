@@ -9,6 +9,8 @@
 #define qMat second
 #define L1 "l1"
 
+// DEPRECATED
+
 namespace l1 {
 
 	typedef std::pair<PyObject*, PyObject*> pyArgs;
