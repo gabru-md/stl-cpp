@@ -2,7 +2,6 @@
 #define UTILS_H
 
 #include <cmath>
-#include <iostream>
 #include "numcpp.h"
 
 namespace utils {

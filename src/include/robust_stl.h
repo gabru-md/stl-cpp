@@ -8,7 +8,6 @@
 #include "numcpp.h"
 #include "utils.h"
 #include "l1/l1_norm.h"
-// #include "l1_norm.h"
 
 namespace stl {
 	nc::array denoise_step (nc::array sample, int H=3, double dn1=1.0, double dn2=1.0) {

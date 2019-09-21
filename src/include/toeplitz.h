@@ -2,7 +2,6 @@
 #define TOEPLITZ_H
 
 #include "numcpp.h"
-#include <iostream>
 
 // computes toeplitz matrix from arrays
 namespace tz {
