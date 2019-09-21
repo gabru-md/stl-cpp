@@ -7,7 +7,7 @@
 #include "include/utils.h"
 #include "include/robust_stl.h"
 // #include "include/l1_norm.h"
-#include "include/l1qc_test.h"
+#include "l1/l1qc_test.h"
 
 #include <iostream>
 #include <cstdlib>
