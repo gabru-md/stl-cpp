@@ -2,10 +2,7 @@
 #define L1_SOLVE_H
 
 #include "cvl1qc.h"
-#include "../include/numcpp.h"
-#include <vector>
-#include <iostream>
-using namespace std;
+#include "../numcpp.h"
 
 nc::matrix toNCMatrix (CvMat* X) {
 	CvMat* temp = cvCloneMat(X);

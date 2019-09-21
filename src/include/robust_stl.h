@@ -6,7 +6,7 @@
 
 #include "numcpp.h"
 #include "utils.h"
-#include "../l1/l1_norm.h"
+#include "l1/l1_norm.h"
 // #include "l1_norm.h"
 
 namespace stl {
