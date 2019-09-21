@@ -27,6 +27,8 @@ namespace tz {
 				toep_mat[i][j] = c[shp.second - i];
 		}
 		
+		nc::RELEASE_MEM(c); nc::RELEASE_MEM(r);
+
 		return toep_mat;
 	}
 

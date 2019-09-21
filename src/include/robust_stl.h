@@ -6,7 +6,7 @@
 
 #include "numcpp.h"
 #include "utils.h"
-#include "l1_norm.h"
+// #include "l1_norm.h"
 
 namespace stl {
 	nc::array denoise_step (nc::array sample, int H=3, double dn1=1.0, double dn2=1.0) {
@@ -21,6 +21,9 @@ namespace stl {
 				nc::array weights;
 				for(int i=0;i<idxs.size();i++)
 					weights.push_back(utils::bilateral_filter(idxs[i],idx,sample[idxs[i]],sample[idx],dn1,dn2));
+
+				nc::RELEASE_MEM(idxs);
+
 				return nc::sum(nc::mul(weight_sample, weights))/nc::sum(weights);
 			}
 		};
@@ -76,7 +79,8 @@ namespace stl {
 		nc::array season_diff = nc::sub(nc::slice(sample, season_len), nc::rev_slice(sample, 0, season_len));
 		nc::array q_arr = nc::concat(season_diff, nc::zeros(sample_len*2-3));
 		std::cout << q_arr;
-		nc::matrix q = nc::reshape(q_arr, nc::shape(q.size(), 1));
+		nc::matrix q = nc::reshape(q_arr, nc::shape(q_arr.size(), 1));
+		std::cout << q << std::endl;
 
 		nc::matrix M = tz::get_toeplitz(nc::shape(sample_len-season_len,sample_len-1), nc::ones(season_len));
 		nc::array bipolar; bipolar.push_back(1); bipolar.push_back(-1);
@@ -84,8 +88,7 @@ namespace stl {
 		nc::matrix P = nc::concat(M, nc::mul(reg1, nc::eye(sample_len-1)), nc::mul(reg2, D)); // write concatenate function here => np.concatenate([M, reg1*np.eye(sample_len-1), reg2*D], axis=0)
 		std::cout << P.size() << " : " << P[0].size() << std::endl;
 		//std::cout << P;
-		std::cout << q << std::endl;
-		nc::array delta_trends = l1::py_L1(P,q);
+		nc::array delta_trends;// = l1::py_L1(P,q);
 		std::cout << delta_trends;
 		nc::array relative_trends = utils::get_relative_trends(delta_trends);
 

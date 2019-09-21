@@ -24,6 +24,17 @@ namespace nc {
 		array third;
 	};
 
+	void RELEASE_MEM (array& in) {
+		vector<double>().swap(in);
+	}
+
+	void RELEASE_MEM (vector<vector<double> >& in) {
+		for(int i=0;i<in.size();i++) {
+			RELEASE_MEM(in[i]);
+		}
+		vector<vector<double> >().swap(in);
+	}
+
 	// creates a new matrix from a shape
 	matrix ncmat (shape shp) {
 		matrix out;
