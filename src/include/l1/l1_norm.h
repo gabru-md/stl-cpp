@@ -34,12 +34,7 @@ void icvAtOps( CvMat* X, CvMat* Y, void* userdata )
 
 nc::array l1_solve(nc::matrix P, nc::matrix q)
 {
-	// nc::matrix mat = nc::ncmat(nc::shape(3,2));
-	// mat[0][0] = 1;mat[0][1] = 2;
-	// mat[1][0] = 2; mat[1][1] = 6;
-	// mat[2][0] = 5; mat[2][1] = 8;
-	// CvMat* a = toCvMat(mat);
-	// cout << a ;
+
 	const int N = P[0].size();
 	const int K = P.size();
 	const int T = 20;
