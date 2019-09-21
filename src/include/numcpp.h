@@ -24,6 +24,13 @@ namespace nc {
 		array third;
 	};
 
+	struct tuple_quad {
+		array first;
+		array second;
+		array third;
+		array fourth;
+	};
+
 	void RELEASE_MEM (array& in) {
 		vector<double>().swap(in);
 	}
@@ -138,7 +145,8 @@ namespace nc {
 		return out;
 	}
 
-	void flush (matrix in) {
+	void flush (string name, matrix in) {
+		std::cout << std::endl << "[>!<] MATRIX :" << name << std::endl;
 		for(int i=0;i<in.size();i++) {
 			for(int j=0;j<in[i].size();j++)
 				std::cout << in[i][j] << " ";
@@ -146,10 +154,12 @@ namespace nc {
 		}
 	}
 
-	void flush (array in) {
+	void flush (string name, array in) {
+		std::cout << std::endl << "[>!<] ARRAY : " << name << std::endl;
+		std::cout << "[ ";
 		for(int i=0;i<in.size();i++) 
 			std::cout << in[i] << " ";
-		std::cout << std::endl; 
+		std::cout << "] " << std::endl; 
 	}
 
 

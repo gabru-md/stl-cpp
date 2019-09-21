@@ -11,6 +11,10 @@
 #include <cstdlib>
 
 int main(void) {
-	stl::trend_extraction(stl::get_sample(10,2), 2);
+	nc::tuple_quad res = stl::RobustSTL(stl::get_sample(50,2), 2);
+	nc::flush("input", res.first);
+	nc::flush("trends_hat", res.second);
+	nc::flush("seasons_hat", res.third);
+	nc::flush("remainders_hat", res.fourth);
 	return 0;
 }

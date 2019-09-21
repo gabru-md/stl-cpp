@@ -3,6 +3,7 @@
 
 #include <time.h>
 #include <stdlib.h>
+#include <iostream>
 
 #include "numcpp.h"
 #include "utils.h"
@@ -109,6 +110,56 @@ namespace stl {
 			}
 		}
 		return out;
+	}
+
+	nc::tuple_quad RobustSTL (nc::array input, int season_len, double reg1=10.0, double reg2= 0.5, int K=2, int H=5, double dn1=1., double dn2=1., double ds1=50., double ds2=1.) {
+		nc::array sample = input;
+		int trial = 1;
+		int MAX_TRIES = 50;
+		int patient = 0;
+
+		nc::array trends_hat;
+		nc::array seasons_hat;
+		nc::array remainders_hat;
+		nc::array prev_remainders;
+			
+		std::cout << "[>!<] RobustSTL starting!" << std::endl;
+
+		while(trial <= MAX_TRIES) {
+
+			std::cout << "[>!<] " << trial << " iteration will start!" << std::endl;
+
+			nc::array denoise_sample = denoise_step(sample, H, dn1, dn2);
+			
+			nc::tuple_a trends = trend_extraction(denoise_sample, season_len, reg1, reg2);
+			nc::array detrend_sample = trends.first; 
+			nc::array relative_trends = trends.second;
+
+			nc::array season_tilda = seasonality_extraction(detrend_sample, season_len, K, H, ds1, ds2);
+
+			nc::tuple_tri adj = adjustment(sample, relative_trends, season_tilda, season_len);
+			trends_hat = adj.first;
+			seasons_hat = adj.second;
+			remainders_hat = adj.third;
+
+			if(trial != 1) {
+				bool converge = check_converge_criteria(prev_remainders, remainders_hat);
+				if(converge) {
+					nc::tuple_quad toReturn = {input, trends_hat, seasons_hat, remainders_hat};
+					std::cout << "[>!<] RobustSTL completed in " << trial << " trials!" << std::endl << std::endl;
+					return toReturn;
+				}
+			}
+
+			trial++;
+
+			prev_remainders = remainders_hat;
+			sample = nc::add(nc::add(trends_hat, seasons_hat), remainders_hat);
+ 		}
+
+ 		nc::tuple_quad toReturn = {input, trends_hat, seasons_hat, remainders_hat};
+ 		std::cout << "[>!<] RobustSTL forces to and end!" << std::endl << std::endl;
+		return toReturn;
 	}
 }
 
