@@ -11,6 +11,7 @@ namespace nc {
 
 	typedef vector<double> array;
 	typedef vector<vector<double> > matrix;
+	typedef vector<bool> anomaly;
 	typedef pair<int, int> shape;
 	typedef pair<array, int> od_array;
 	typedef pair<int, int> tuple_i;
@@ -143,6 +144,17 @@ namespace nc {
 		for(int i=start;i<end;i+=1.0)
 			out.push_back(i);
 		return out;
+	}
+
+	void flush (string name, anomaly in) {
+		std::cout << std::endl << "[>!<] ANOMALIES : " << name << std::endl;
+		std::cout << "[ ";
+		for(int i=0;i<in.size();i++)
+			if(in[i])
+				std::cout << "YES ";
+			else
+				std::cout << "NO ";
+		std::cout << "] " << std::endl; 		
 	}
 
 	void flush (string name, matrix in) {
