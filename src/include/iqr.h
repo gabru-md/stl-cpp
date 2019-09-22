@@ -45,8 +45,8 @@ namespace iqr {
 	nc::anomaly findIQROutliers (nc::array sample) {
 		nc::anomaly toReturn(sample.size(), false);
 		tuple_tri res = _iqr(sample);
-		std::cout << res.Q1 <<" : " << res.Q3 << " : " << res.IQR << std::endl << std::endl;
-		std::cout << res.Q1-1.5*res.IQR << " : "<< res.Q3+1.5*res.IQR<< std::endl << std::endl;
+		// std::cout << res.Q1 <<" : " << res.Q3 << " : " << res.IQR << std::endl << std::endl;
+		// std::cout << res.Q1-1.5*res.IQR << " : "<< res.Q3+1.5*res.IQR<< std::endl << std::endl;
 		for(int i=0;i<sample.size();i++) {
 			if(inRange(sample[i], res.Q1-1.5*res.IQR, res.Q3+1.5*res.IQR))
 				continue;

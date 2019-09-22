@@ -21,7 +21,10 @@ int main(void) {
 	nc::flush("remainders_hat", res.fourth);
 
 	nc::anomaly isAnomaly = iqr::findIQROutliers(res.fourth);
-	nc::flush("anomalies", isAnomaly);
+	nc::flush("anomalies in remainder", isAnomaly);
+
+	isAnomaly = iqr::findIQROutliers(sample);
+	nc::flush("anomalies in sample", isAnomaly);
 
 	return 0;
 }
