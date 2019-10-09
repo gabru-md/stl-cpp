@@ -63,6 +63,9 @@ namespace stl {
 		double trend_init = nc::mean(nc::slice(season_tilda, 0, season_len*num_season));
 		nc::array trends_hat = nc::add(relative_trends, trend_init);
 		nc::array seasons_hat = nc::sub(season_tilda, trend_init);
+		nc::flush("sample", sample);
+		nc::flush("trends_hat", trends_hat);
+		nc::flush("seasons_hat", seasons_hat);
 		nc::array remainders_hat = nc::sub(nc::sub(sample, trends_hat), seasons_hat);
 		nc::tuple_tri out = {trends_hat, seasons_hat, remainders_hat};
 		return out;

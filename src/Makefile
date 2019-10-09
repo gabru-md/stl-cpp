@@ -1,6 +1,6 @@
 CXX = g++
-LINKFLAG = -ldl -lpthread -lrt -lopencv_core
-INCFLAGS = -I"/usr/include/opencv"
+LINKFLAG = -ldl -lpthread -lrt -lopencv_core -lpython2.7
+INCFLAGS = -std=c++11 -I"/usr/include/opencv" -I"/usr/include/python2.7"
 CXXFLAGS = -O3 --fast-math -msse2 
 
 stl:

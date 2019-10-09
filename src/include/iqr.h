@@ -1,8 +1,10 @@
 #ifndef IQR_H
 #define IQR_H
 
-#include <algorithm>
 #include "numcpp.h"
+
+#include <cmath>
+#include <algorithm>
 #include <iostream>
 
 //uses IQR - Inter Quartile Range to find outliers.
@@ -21,6 +23,7 @@ namespace iqr {
 	}
 
 	bool inRange(double el, double low, double high) {
+		// if(el==0.0) return false;
 		return (el>=low && el<=high);
 	}
 
@@ -48,7 +51,7 @@ namespace iqr {
 		// std::cout << res.Q1 <<" : " << res.Q3 << " : " << res.IQR << std::endl << std::endl;
 		// std::cout << res.Q1-1.5*res.IQR << " : "<< res.Q3+1.5*res.IQR<< std::endl << std::endl;
 		for(int i=0;i<sample.size();i++) {
-			if(inRange(sample[i], res.Q1-1.5*res.IQR, res.Q3+1.5*res.IQR))
+			if(inRange(sample[i], res.Q1-log(1.5)*res.IQR, res.Q3+log(1.5)*res.IQR))
 				continue;
 			toReturn[i] = true;
 		}

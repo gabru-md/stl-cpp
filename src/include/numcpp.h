@@ -2,6 +2,7 @@
 #define NUMCPP_H
 
 #include <vector>
+#include <cmath>
 #include <iostream>
 #include <stdarg.h>
 
@@ -17,7 +18,7 @@ namespace nc {
 	typedef pair<int, int> tuple_i;
 	typedef pair<double, double> tuple_d;
 	typedef pair<array, array> tuple_a;
-
+	typedef vector<pair<bool, double> > anomaly_bd;
 
 	struct tuple_tri {
 		array first;
@@ -172,6 +173,30 @@ namespace nc {
 		for(int i=0;i<in.size();i++) 
 			std::cout << in[i] << " ";
 		std::cout << "] " << std::endl; 
+	}
+
+	void flush (string name, anomaly_bd in) {
+		std::cout << std::endl << "[>!<] ANOMALIES : " << name << std::endl;
+		std::cout << "[ ";
+		for(int i=0;i<in.size();i++)
+			if(in[i].first)
+				std::cout << "(YES, " << in[i].second << ") ";
+			else
+				std::cout << "(NO, " << in[i].second << ") ";
+		std::cout << "] " << std::endl; 
+	}
+
+	void flush (string name, anomaly anom, array sample) {
+		anomaly_bd toSend;
+		for(int i=0;i<anom.size();i++) toSend.push_back(make_pair(anom[i], sample[i]));
+		flush(name,toSend);
+	}
+
+	array log_ (array in) {
+		array out;
+		for(int i=0;i<in.size();i++)
+			out.push_back(log(in[i]));
+		return out;
 	}
 
 
